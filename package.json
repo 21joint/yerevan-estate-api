@@ -16,8 +16,5 @@
     "url": "https://github.com/21joint/yerevan-estate-api/issues"
   },
   "homepage": "https://github.com/21joint/yerevan-estate-api#readme",
-  "dependencies": {
-    "aws-sdk": "^2.325.0",
-    "graphql": "^14.0.2"
-  }
+  "dependencies": {}
 }

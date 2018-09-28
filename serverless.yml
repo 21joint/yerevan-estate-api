@@ -18,18 +18,19 @@ service: yerevan-estate # NOTE: update this with your service name
 # frameworkVersion: "=X.X.X"
 
 provider:
-  role: arn:aws:iam::YourAccountNumber:role/YourIamRole
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs6.10
   environment:
-    AWS_ACCOUNT_ID: '043684136538'
     DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
     iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: "Allow"
       Action:
-      - dynamodb:GetItem
-      - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      - "s3:ListBucket"
+      Resource:
+        Fn::Join:
+        - ""
+        - - "arn:aws:s3:::"
+          - Ref: ServerlessDeploymentBucket
 
   resources:
     Resources:
