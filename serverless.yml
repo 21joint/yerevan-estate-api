@@ -18,10 +18,36 @@ service: yerevan-estate # NOTE: update this with your service name
 # frameworkVersion: "=X.X.X"
 
 provider:
+  role: arn:aws:iam::YourAccountNumber:role/YourIamRole
   name: aws
   runtime: nodejs8.10
+  environment:
+    AWS_ACCOUNT_ID: '043684136538'
+    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+      - dynamodb:GetItem
+      - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
-# you can overwrite defaults here
+  resources:
+    Resources:
+      NicknamesTable:
+        Type: 'AWS::DynamoDB::Table'
+        Properties:
+          AttributeDefinitions:
+          - AttributeName: firstName
+            AttributeType: S
+          KeySchema:
+          - AttributeName: firstName
+            KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          TableName: ${self:provider.environment.DYNAMODB_TABLE}
+
+  # you can overwrite defaults here
   stage: dev
   region: eu-central-1
 
